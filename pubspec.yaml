@@ -15,7 +15,7 @@ dev_dependencies:
     sdk: flutter
 
 executables:
-  app_starter:
+  app_starter_plus:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
