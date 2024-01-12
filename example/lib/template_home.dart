@@ -10,7 +10,7 @@ class TemplateHome extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text("Hello from Flappy Template"),
-            Text(ConfigManager.of(context).apiBaseUrl),
+            Text(ConfigManager.of(context)!.apiBaseUrl!),
           ],
         ),
       ),

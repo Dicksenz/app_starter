@@ -3,16 +3,16 @@ import 'package:flutter/cupertino.dart';
 
 class ConfigManager extends InheritedWidget {
   ConfigManager({
-    Key key,
-    @required Widget child,
+    Key? key,
+    required Widget child,
     this.apiBaseUrl,
     this.flavor,
   }) : super(key: key, child: child);
 
-  final String apiBaseUrl;
-  final Flavor flavor;
+  final String? apiBaseUrl;
+  final Flavor? flavor;
 
-  static ConfigManager of(BuildContext context) {
+  static ConfigManager? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType(aspect: ConfigManager);
   }
 

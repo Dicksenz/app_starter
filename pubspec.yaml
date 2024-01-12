@@ -1,4 +1,4 @@
-name: app_starter
+name: app_starter_plus
 description: A simple dart package to start any flutter application based on a model git repository
 version: 1.0.0+2
 homepage: https://github.com/ThomasEcalle/app_starter
@@ -22,7 +22,6 @@ executables:
 
 # The following section is specific to Flutter.
 flutter:
-
 # To add assets to your package, add an assets section, like this:
 # assets:
 #   - images/a_dot_burr.jpeg

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:app_starter/src/utils.dart';
+import 'package:app_starter_plus/src/utils.dart';
 
 /// Model representing app information
 class AppModel {

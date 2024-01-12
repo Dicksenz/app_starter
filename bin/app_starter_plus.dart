@@ -1,4 +1,4 @@
-import 'package:app_starter/app_starter.dart';
+import 'package:app_starter_plus/app_starter.dart';
 
 /// Root of the executable
 void main(List<String> arguments) {

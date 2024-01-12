@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:app_starter/src/logger.dart';
+import 'package:app_starter_plus/src/logger.dart';
 import 'package:args/args.dart';
 import 'package:yaml/yaml.dart';
 
@@ -150,6 +150,18 @@ class CommandRunner {
         "$workingDirectoryPath/${appModel.name}/lib",
       );
 
+      // Add assets
+      _copyPasteDirectory(
+        "$workingDirectoryPath/temp/assets",
+        "$workingDirectoryPath/${appModel.name}/assets",
+      );
+
+      // Add .githooks
+      _copyPasteDirectory(
+        "$workingDirectoryPath/temp/.githooks",
+        "$workingDirectoryPath/${appModel.name}/.githooks",
+      );
+
       _copyPasteDirectory(
         "$workingDirectoryPath/temp/test",
         "$workingDirectoryPath/${appModel.name}/test",
@@ -162,6 +174,53 @@ class CommandRunner {
 
       await _changeAllInFile(
         "$workingDirectoryPath/${appModel.name}/pubspec.yaml",
+        templatePackageName,
+        appModel.name!,
+      );
+
+      // Change readme
+      await _copyPasteFileContent(
+        "$workingDirectoryPath/temp/README.md",
+        "$workingDirectoryPath/${appModel.name}/README.md",
+      );
+
+      await _changeAllInFile(
+        "$workingDirectoryPath/${appModel.name}/README.md",
+        templatePackageName,
+        appModel.name!,
+      );
+
+      // Change analysis_options.yaml
+      await _copyPasteFileContent(
+        "$workingDirectoryPath/temp/analysis_options.yaml",
+        "$workingDirectoryPath/${appModel.name}/analysis_options.yaml",
+      );
+
+      await _changeAllInFile(
+        "$workingDirectoryPath/${appModel.name}/analysis_options.yaml",
+        templatePackageName,
+        appModel.name!,
+      );
+
+      // Change .gitignore
+      await _copyPasteFileContent(
+        "$workingDirectoryPath/temp/.gitignore",
+        "$workingDirectoryPath/${appModel.name}/.gitignore",
+      );
+
+      await _changeAllInFile(
+        "$workingDirectoryPath/${appModel.name}/.gitignore",
+        templatePackageName,
+        appModel.name!,
+      );
+
+      // Add flavorizr.yaml
+      await _copyPasteFileContent(
+        "$workingDirectoryPath/temp/flavorizr.yaml",
+        "$workingDirectoryPath/${appModel.name}/flavorizr.yaml",
+      );
+      await _changeAllInFile(
+        "$workingDirectoryPath/${appModel.name}/flavorizr.yaml",
         templatePackageName,
         appModel.name!,
       );
