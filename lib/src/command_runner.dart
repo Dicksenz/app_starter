@@ -156,6 +156,12 @@ class CommandRunner {
         "$workingDirectoryPath/${appModel.name}/assets",
       );
 
+      // Add .vscode
+      _copyPasteDirectory(
+        "$workingDirectoryPath/temp/.vscode",
+        "$workingDirectoryPath/${appModel.name}/.vscode",
+      );
+
       // Add .githooks
       _copyPasteDirectory(
         "$workingDirectoryPath/temp/.githooks",
