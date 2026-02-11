@@ -1,3 +1,9 @@
+## [1.1.4] - FVM-Only Environment Support
+
+- Add support for environments where global `flutter` and `dart` are missing
+- Automatically switch to FVM mode if `fvm` is available but global `flutter` is not
+- Update documentation for FVM-only activation and usage
+
 ## [1.1.3] - Robust FVM Integration
 
 - Improve FVM version detection: searches parent directories for `.fvmrc` and falls back to `fvm flutter --version`

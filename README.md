@@ -10,6 +10,23 @@ Simply activate the package:
 flutter pub global activate app_starter_plus
 ```
 
+### FVM-Only Setup
+
+If you don't have Flutter/Dart installed globally and use **FVM** exclusively, activate the plugin like this:
+
+```sh
+fvm dart pub global activate app_starter_plus
+```
+
+To run it in an FVM-only environment, you can use:
+
+```sh
+fvm dart pub global run app_starter_plus:app_starter_plus <args>
+```
+
+> [!NOTE]
+> Version 1.1.4+ automatically detects if global Flutter is missing and will use `fvm flutter` for all operations.
+
 ## How to use it ?
 
 Place yourself where you want to create your app and then simply run:

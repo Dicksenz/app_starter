@@ -79,12 +79,26 @@ class CommandRunner {
       return;
     }
 
+    bool useFvm = results["fvm"] || (appModelFomConfig.useFvm ?? false);
+
+    // Auto-detect FVM-only environment if flutter is not found but fvm is
+    if (!useFvm) {
+      final bool hasGlobalFlutter = _isCommandAvailable("flutter");
+      final bool hasFvm = _isCommandAvailable("fvm");
+
+      if (!hasGlobalFlutter && hasFvm) {
+        Logger.logInfo(
+            "Global flutter not found, but fvm detected. Switching to FVM mode.");
+        useFvm = true;
+      }
+    }
+
     final AppModel appModel = AppModel(
       name: results["name"] ?? appModelFomConfig.name,
       organization: results["org"] ?? appModelFomConfig.organization,
       templateRepository:
           results["template"] ?? appModelFomConfig.templateRepository,
-      useFvm: results["fvm"] || (appModelFomConfig.useFvm ?? false),
+      useFvm: useFvm,
       fvmVersion: results["fvm-version"] ??
           appModelFomConfig.fvmVersion ??
           AppModel.getFvmVersionFromSource(),
@@ -438,5 +452,18 @@ Organization, Template and FVM values would be taken from config.
 
 config     ->      shows values stored in configuration file
     """);
+  }
+
+  bool _isCommandAvailable(String command) {
+    try {
+      final result = Process.runSync(
+        Platform.isWindows ? 'where' : 'which',
+        [command],
+        runInShell: true,
+      );
+      return result.exitCode == 0;
+    } catch (_) {
+      return false;
+    }
   }
 }
