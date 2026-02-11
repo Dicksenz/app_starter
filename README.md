@@ -30,6 +30,18 @@ Or, more concise, using abbreviations:
 app_starter_plus -n toto -o io.example -t https://github.com/ThomasEcalle/flappy_template
 ```
 
+Using **FVM** (Flutter Version Management):
+
+```sh
+app_starter_plus -n toto -o io.example -t <template_url> --fvm
+```
+
+Using a specific **FVM version**:
+
+```sh
+app_starter_plus -n toto -o io.example -t <template_url> --fvm --fvm-version 3.10.0
+```
+
 Showing configuration file store values:
 
 ```sh
@@ -46,14 +58,16 @@ app_starter_plus --help
 
 Here are the list of arguments you could use :
 
-| key      | abbreviation | description                               | example                                         |
-| :------- | :----------: | :---------------------------------------- | :---------------------------------------------- |
-| name     |      n       | the dart package identifier               | example                                         |
-| org      |      o       | the organisation identifier               | com.example                                     |
-| template |      t       | the git repository of your template       | https://github.com/ThomasEcalle/flappy_template |
-| config   |      c       | shows values stored in configuration file | --config                                        |
-| save     |      s       | save values in configuration file         | --save                                          |
-| help     |      h       | shows help                                | --help                                          |
+| key         | abbreviation | description                               | example                                         |
+| :---------- | :----------: | :---------------------------------------- | :---------------------------------------------- |
+| name        |      n       | the dart package identifier               | example                                         |
+| org         |      o       | the organisation identifier               | com.example                                     |
+| template    |      t       | the git repository of your template       | https://github.com/ThomasEcalle/flappy_template |
+| fvm         |      f       | use fvm for flutter commands              | --fvm                                           |
+| fvm-version |              | the flutter version to use with fvm       | --fvm-version 3.10.0                            |
+| config      |      c       | shows values stored in configuration file | --config                                        |
+| save        |      s       | save values in configuration file         | --save                                          |
+| help        |      h       | shows help                                | --help                                          |
 
 ## How does it works ?
 

@@ -8,11 +8,15 @@ class AppModel {
   final String? name;
   final String? organization;
   final String? templateRepository;
+  final bool? useFvm;
+  final String? fvmVersion;
 
   AppModel({
     required this.name,
     required this.organization,
     required this.templateRepository,
+    this.useFvm,
+    this.fvmVersion,
   });
 
   /// Generate AppModel instance from configuration file
@@ -25,10 +29,18 @@ class AppModel {
         name: json["name"],
         organization: json["organization"],
         templateRepository: json["template"],
+        useFvm: json["useFvm"],
+        fvmVersion: json["fvmVersion"],
       );
     }
 
-    return AppModel(name: null, organization: null, templateRepository: null);
+    return AppModel(
+      name: null,
+      organization: null,
+      templateRepository: null,
+      useFvm: null,
+      fvmVersion: null,
+    );
   }
 
   /// Write information in config file
@@ -53,6 +65,8 @@ class AppModel {
       "name": name,
       "organization": organization,
       "template": templateRepository,
+      "useFvm": useFvm,
+      "fvmVersion": fvmVersion,
     };
 
     return jsonEncode(map);

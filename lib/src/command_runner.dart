@@ -27,6 +27,16 @@ class CommandRunner {
         defaultsTo: null,
       )
       ..addFlag(
+        "fvm",
+        abbr: "f",
+        negatable: false,
+        defaultsTo: false,
+      )
+      ..addOption(
+        "fvm-version",
+        defaultsTo: null,
+      )
+      ..addFlag(
         "config",
         abbr: "c",
         negatable: false,
@@ -63,6 +73,8 @@ class CommandRunner {
       Logger.logConfigKeyValue("organization", appModelFomConfig.organization);
       Logger.logConfigKeyValue(
           "template", appModelFomConfig.templateRepository);
+      Logger.logConfigKeyValue("useFvm", appModelFomConfig.useFvm.toString());
+      Logger.logConfigKeyValue("fvmVersion", appModelFomConfig.fvmVersion);
 
       return;
     }
@@ -72,6 +84,8 @@ class CommandRunner {
       organization: results["org"] ?? appModelFomConfig.organization,
       templateRepository:
           results["template"] ?? appModelFomConfig.templateRepository,
+      useFvm: results["fvm"] || (appModelFomConfig.useFvm ?? false),
+      fvmVersion: results["fvm-version"] ?? appModelFomConfig.fvmVersion,
     );
 
     bool hasOneFiledNull = false;
@@ -110,13 +124,20 @@ class CommandRunner {
     final Directory current = Directory.current;
     final String workingDirectoryPath = current.path;
 
+    final String flutterExecutable = (appModel.useFvm ?? false) ? "fvm" : "flutter";
+    final List<String> flutterArgsPrefix =
+        (appModel.useFvm ?? false) ? ["flutter"] : [];
+
     try {
-      Logger.logInfo(
-          "Creating flutter project using your current flutter version...");
+      final String flutterVersionMsg = (appModel.useFvm ?? false)
+          ? "FVM (flutter version: ${appModel.fvmVersion ?? 'default'})"
+          : "your current flutter version";
+      Logger.logInfo("Creating flutter project using $flutterVersionMsg...");
 
       Process.runSync(
-        "flutter",
+        flutterExecutable,
         [
+          ...flutterArgsPrefix,
           "create",
           "--org",
           appModel.organization!,
@@ -125,6 +146,16 @@ class CommandRunner {
         workingDirectory: workingDirectoryPath,
         runInShell: true,
       );
+
+      if ((appModel.useFvm ?? false) && appModel.fvmVersion != null) {
+        Logger.logInfo("Setting FVM version to ${appModel.fvmVersion}...");
+        Process.runSync(
+          "fvm",
+          ["use", appModel.fvmVersion!],
+          workingDirectory: "$workingDirectoryPath/${appModel.name}",
+          runInShell: true,
+        );
+      }
 
       Logger.logInfo(
           "Retrieving your template from ${appModel.templateRepository}...");
@@ -244,12 +275,14 @@ class CommandRunner {
       );
 
       Process.runSync(
-        "flutter",
+        flutterExecutable,
         [
+          ...flutterArgsPrefix,
           "pub",
           "get",
         ],
         workingDirectory: "$workingDirectoryPath/${appModel.name}",
+        runInShell: true,
       );
 
       Logger.logInfo("Deleting temp files used for generation...");
@@ -363,31 +396,34 @@ class CommandRunner {
   void _showHelp() {
     print("""
     
-usage: app_starter [--save] [--name <name>] [--org <org>] [--template <template>] [--config]
+usage: app_starter [--save] [--name <name>] [--org <org>] [--template <template>] [--fvm] [--fvm-version <version>] [--config]
 
 * Abbreviations:
 
 --name      |  -n
 --org       |  -o
 --template  |  -t
+--fvm       |  -f
 --save      |  -s
 --config    |  -c
 
 * Add information about the app and the template:
   
-name       ->       indicates the package identifier (ex: toto)
-org        ->       indicates the organization identifier (ex: io.example)
-template   ->       indicates the template repository (ex: https://github.com/ThomasEcalle/flappy_template)
+name        ->       indicates the package identifier (ex: toto)
+org         ->       indicates the organization identifier (ex: io.example)
+template    ->       indicates the template repository (ex: https://github.com/ThomasEcalle/flappy_template)
+fvm         ->       indicates if the tool should use fvm (ex: --fvm or -f)
+fvm-version ->       indicates the flutter version to use with fvm (ex: --fvm-version 3.10.0)
 
 * Store default information for future usages:
 
 save       ->       save information in config file in order to have default configuration values
 
-For example, running : app_starter --save -n toto -o io.example -t https://github.com/ThomasEcalle/flappy_template
-
+For example, running : app_starter --save -n toto -o io.example -t https://github.com/ThomasEcalle/flappy_template --fvm
+  
 This will store these information in configuration file.
 That way, next time, you could for example just run : app_starter -n myapp
-Organization and Template values would be taken from config.
+Organization, Template and FVM values would be taken from config.
 
 config     ->      shows values stored in configuration file
     """);
