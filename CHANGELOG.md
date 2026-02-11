@@ -1,3 +1,9 @@
+## [1.1.3] - Robust FVM Integration
+
+- Improve FVM version detection: searches parent directories for `.fvmrc` and falls back to `fvm flutter --version`
+- Ensure exact FVM version is logged and propagated to the new project
+- Add debug logging for FVM versioning status
+
 ## [1.1.2] - FVM Interaction & Detection Fixes
 
 - Fix "freezing" when FVM requires user interaction (e.g., confirmation to install version)

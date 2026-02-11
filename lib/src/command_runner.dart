@@ -132,9 +132,10 @@ class CommandRunner {
         (appModel.useFvm ?? false) ? ["flutter"] : [];
 
     try {
-      final String flutterVersionMsg = (appModel.useFvm ?? false)
-          ? "FVM (flutter version: ${appModel.fvmVersion ?? 'default'})"
-          : "your current flutter version";
+      final String versionMsg =
+          appModel.fvmVersion != null ? "version: ${appModel.fvmVersion}" : "default";
+      final String flutterVersionMsg =
+          (appModel.useFvm ?? false) ? "FVM ($versionMsg)" : "your current flutter version";
       Logger.logInfo("Creating flutter project using $flutterVersionMsg...");
 
       final createProcess = await Process.start(

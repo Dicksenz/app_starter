@@ -50,17 +50,40 @@ class AppModel {
     configFile.writeAsStringSync(jsonText, mode: FileMode.write);
   }
 
-  /// Read FVM version from .fvmrc in current directory
+  /// Read FVM version from .fvmrc in current directory or parent directories
+  /// If not found, attempts to read from 'fvm flutter --version'
   static String? getFvmVersionFromSource() {
     try {
-      final File fvmrcFile = File(Directory.current.path + "/.fvmrc");
-      if (fvmrcFile.existsSync()) {
-        final Map<String, dynamic> json =
-            jsonDecode(fvmrcFile.readAsStringSync());
-        return json["flutter"];
+      // 1. Search for .fvmrc up the directory tree
+      Directory current = Directory.current;
+      while (true) {
+        final File fvmrcFile = File(current.path + "/.fvmrc");
+        if (fvmrcFile.existsSync()) {
+          final Map<String, dynamic> json =
+              jsonDecode(fvmrcFile.readAsStringSync());
+          final version = json["flutter"];
+          if (version != null) return version;
+        }
+
+        final parent = current.parent;
+        if (parent.path == current.path) break; // Reached root
+        current = parent;
+      }
+
+      // 2. Fallback: run 'fvm flutter --version' to get current FVM version
+      final result = Process.runSync("fvm", ["flutter", "--version"],
+          runInShell: true, includeParentEnvironment: true);
+      if (result.exitCode == 0) {
+        final String output = result.stdout.toString();
+        // Regex to match "Flutter 3.16.0" or similar at the start
+        final RegExp versionRegex = RegExp(r"Flutter\s+(\d+\.\d+\.\d+)");
+        final match = versionRegex.firstMatch(output);
+        if (match != null) {
+          return match.group(1);
+        }
       }
     } catch (error) {
-      // Ignore errors reading .fvmrc
+      // Ignore errors reading .fvmrc or running command
     }
     return null;
   }
