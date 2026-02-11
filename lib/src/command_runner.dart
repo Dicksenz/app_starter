@@ -85,7 +85,9 @@ class CommandRunner {
       templateRepository:
           results["template"] ?? appModelFomConfig.templateRepository,
       useFvm: results["fvm"] || (appModelFomConfig.useFvm ?? false),
-      fvmVersion: results["fvm-version"] ?? appModelFomConfig.fvmVersion,
+      fvmVersion: results["fvm-version"] ??
+          appModelFomConfig.fvmVersion ??
+          AppModel.getFvmVersionFromSource(),
     );
 
     bool hasOneFiledNull = false;
@@ -124,7 +126,8 @@ class CommandRunner {
     final Directory current = Directory.current;
     final String workingDirectoryPath = current.path;
 
-    final String flutterExecutable = (appModel.useFvm ?? false) ? "fvm" : "flutter";
+    final String flutterExecutable =
+        (appModel.useFvm ?? false) ? "fvm" : "flutter";
     final List<String> flutterArgsPrefix =
         (appModel.useFvm ?? false) ? ["flutter"] : [];
 
@@ -147,11 +150,12 @@ class CommandRunner {
         runInShell: true,
       );
 
-      if ((appModel.useFvm ?? false) && appModel.fvmVersion != null) {
-        Logger.logInfo("Setting FVM version to ${appModel.fvmVersion}...");
+      if (appModel.useFvm ?? false) {
+        final versionToUse = appModel.fvmVersion ?? "stable";
+        Logger.logInfo("Setting FVM version to $versionToUse...");
         Process.runSync(
           "fvm",
-          ["use", appModel.fvmVersion!],
+          ["use", versionToUse],
           workingDirectory: "$workingDirectoryPath/${appModel.name}",
           runInShell: true,
         );

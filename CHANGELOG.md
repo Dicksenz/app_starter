@@ -1,3 +1,9 @@
+## [1.1.1] - FVM Refinements
+
+- Add automatic FVM version detection from current directory (`.fvmrc`)
+- Ensure `.fvmrc` is always created/updated in the new project when FVM is enabled
+- Improve fallback logic for FVM versioning
+
 ## [1.1.0] - FVM Support
 
 - Add support for FVM (Flutter Version Management)

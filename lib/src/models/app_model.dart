@@ -50,6 +50,21 @@ class AppModel {
     configFile.writeAsStringSync(jsonText, mode: FileMode.write);
   }
 
+  /// Read FVM version from .fvmrc in current directory
+  static String? getFvmVersionFromSource() {
+    try {
+      final File fvmrcFile = File(".fvmrc");
+      if (fvmrcFile.existsSync()) {
+        final Map<String, dynamic> json =
+            jsonDecode(fvmrcFile.readAsStringSync());
+        return json["flutter"];
+      }
+    } catch (error) {
+      // Ignore errors reading .fvmrc
+    }
+    return null;
+  }
+
   /// Return if package identifier is a valid one or not, base on dart specifications
   bool hasValidPackageName() {
     if (name != null) {
