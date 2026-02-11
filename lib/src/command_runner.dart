@@ -137,7 +137,7 @@ class CommandRunner {
           : "your current flutter version";
       Logger.logInfo("Creating flutter project using $flutterVersionMsg...");
 
-      Process.runSync(
+      final createProcess = await Process.start(
         flutterExecutable,
         [
           ...flutterArgsPrefix,
@@ -147,18 +147,22 @@ class CommandRunner {
           appModel.name!,
         ],
         workingDirectory: workingDirectoryPath,
+        mode: ProcessStartMode.inheritStdio,
         runInShell: true,
       );
+      await createProcess.exitCode;
 
       if (appModel.useFvm ?? false) {
         final versionToUse = appModel.fvmVersion ?? "stable";
         Logger.logInfo("Setting FVM version to $versionToUse...");
-        Process.runSync(
+        final fvmUseProcess = await Process.start(
           "fvm",
           ["use", versionToUse],
           workingDirectory: "$workingDirectoryPath/${appModel.name}",
+          mode: ProcessStartMode.inheritStdio,
           runInShell: true,
         );
+        await fvmUseProcess.exitCode;
       }
 
       Logger.logInfo(
@@ -278,7 +282,7 @@ class CommandRunner {
         appModel.name!,
       );
 
-      Process.runSync(
+      final pubGetProcess = await Process.start(
         flutterExecutable,
         [
           ...flutterArgsPrefix,
@@ -286,8 +290,10 @@ class CommandRunner {
           "get",
         ],
         workingDirectory: "$workingDirectoryPath/${appModel.name}",
+        mode: ProcessStartMode.inheritStdio,
         runInShell: true,
       );
+      await pubGetProcess.exitCode;
 
       Logger.logInfo("Deleting temp files used for generation...");
 

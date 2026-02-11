@@ -1,3 +1,9 @@
+## [1.1.2] - FVM Interaction & Detection Fixes
+
+- Fix "freezing" when FVM requires user interaction (e.g., confirmation to install version)
+- Improve automatic FVM version detection from `.fvmrc`
+- Switch to interactive process execution for `flutter` and `fvm` commands
+
 ## [1.1.1] - FVM Refinements
 
 - Add automatic FVM version detection from current directory (`.fvmrc`)

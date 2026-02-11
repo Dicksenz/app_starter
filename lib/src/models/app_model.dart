@@ -53,7 +53,7 @@ class AppModel {
   /// Read FVM version from .fvmrc in current directory
   static String? getFvmVersionFromSource() {
     try {
-      final File fvmrcFile = File(".fvmrc");
+      final File fvmrcFile = File(Directory.current.path + "/.fvmrc");
       if (fvmrcFile.existsSync()) {
         final Map<String, dynamic> json =
             jsonDecode(fvmrcFile.readAsStringSync());
