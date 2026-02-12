@@ -222,6 +222,16 @@ class CommandRunner {
         "$workingDirectoryPath/${appModel.name}/.githooks",
       );
 
+      // Add .cursor
+      final Directory cursorDir =
+          Directory("$workingDirectoryPath/temp/.cursor");
+      if (cursorDir.existsSync()) {
+        _copyPasteDirectory(
+          "$workingDirectoryPath/temp/.cursor",
+          "$workingDirectoryPath/${appModel.name}/.cursor",
+        );
+      }
+
       _copyPasteDirectory(
         "$workingDirectoryPath/temp/test",
         "$workingDirectoryPath/${appModel.name}/test",

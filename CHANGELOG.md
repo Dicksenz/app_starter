@@ -1,3 +1,7 @@
+## [1.1.5] - .cursor Folder Support
+
+- Add support for copying the `.cursor` folder from templates to the new project
+
 ## [1.1.4] - FVM-Only Environment Support
 
 - Add support for environments where global `flutter` and `dart` are missing
